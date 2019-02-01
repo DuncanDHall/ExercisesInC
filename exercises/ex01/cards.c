@@ -1,44 +1,69 @@
-/*
- * Program to evaluate face values.
- * Released under the Vegas Public License
- * (c) 2014 The College Blackjack Team.
- */
-
 #include <stdio.h>
 #include <stdlib.h>
+
+int get_card_val(char card_name[])
+/*
+ * Returns the value of cards for the purpose of playing blackjack.
+ *
+ * Args:
+ *      char chard_name - the card rank ('A', 'K', 'Q', ... '3', '2')
+ *
+ * Returns:
+ *      int - card value, 0 for entry outside range, and -1 for 'X'
+ */
+{
+    int val;
+    switch(card_name[0]) {
+        case 'K':
+        case 'Q':
+        case 'J':
+            return 10;
+        case 'A':
+            return 11;
+        case 'X':
+            return -1;
+        default:
+            if ((val < 1) || (val > 10)) {
+                puts("I don't understand that value!");
+                return 0;
+            }
+            return atoi(card_name);
+    }
+}
+
+int get_count_modifier(int val)
+/*
+ * Determines the correct modification to apply to the count.
+ *
+ * Args:
+ *      int card_value - the card value
+ *
+ * Returns:
+ *      int - count modifier 1, 0, or -1 depending on rank
+ */
+{
+    if (val >= 3 && val <= 6) {
+        return 1;
+    } else if (val == 10) {
+        return -1;
+    } else {
+        return 0;
+    }
+}
 
 int main()
 {
     char card_name[3];
     int count = 0;
+    int val;
     do {
         puts("Enter the card_name: ");
         scanf("%2s", card_name);
-        int val = 0;
-        switch(card_name[0]) {
-            case 'K':
-            case 'Q':
-            case 'J':
-                val = 10;
-                break;
-            case 'A':
-                val = 11;
-                break;
-            case 'X':
-                continue;
-            default:
-                val = atoi(card_name);
-                if ((val < 1) || (val > 10)) {
-                    puts("I don't understand that value!");
-                    continue;
-                }
-        }
-        if (val >= 3 && val <= 6) {
-            count++;
-        } else if (val == 10) {
-            count--;
-        }
+
+        val = get_card_val(card_name);
+        count += get_count_modifier(val);
+
         printf("Current count: %i\n", count);
-    } while (card_name[0] != 'X');
+    } while (val != -1);
     return 0;
 }
