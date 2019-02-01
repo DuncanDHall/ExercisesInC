@@ -1,7 +1,12 @@
+/*
+ * A simple program to assist counting cards for blackjack.
+ *
+ * Prompts user for input (truncated at 2 characters), converts to a
+ * numerical value, and keeps a running count of high vs low cards
+ */
 #include <stdio.h>
 #include <stdlib.h>
 
-int get_card_val(char card_name[])
 /*
  * Returns the value of cards for the purpose of playing blackjack.
  *
@@ -11,6 +16,7 @@ int get_card_val(char card_name[])
  * Returns:
  *      int - card value, 0 for entry outside range, and -1 for 'X'
  */
+int get_card_val(char card_name[])
 {
     int val;
     switch(card_name[0]) {
@@ -23,15 +29,15 @@ int get_card_val(char card_name[])
         case 'X':
             return -1;
         default:
+            val = atoi(card_name);
             if ((val < 1) || (val > 10)) {
                 puts("I don't understand that value!");
                 return 0;
             }
-            return atoi(card_name);
+            return val;
     }
 }
 
-int get_count_modifier(int val)
 /*
  * Determines the correct modification to apply to the count.
  *
@@ -41,6 +47,7 @@ int get_count_modifier(int val)
  * Returns:
  *      int - count modifier 1, 0, or -1 depending on rank
  */
+int get_count_modifier(int val)
 {
     if (val >= 3 && val <= 6) {
         return 1;
