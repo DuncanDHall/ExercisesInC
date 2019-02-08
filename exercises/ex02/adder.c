@@ -27,16 +27,17 @@ int main()
     int non_digit_flag;
 
     int array[10];
-    int array_pos = 0;
+    int array_len = 0;
     int sum;
 
-    do {
+    while (1) {
         // INPUT //
         puts("Enter an integer: ");
         status = scanf("%5s", input);
         if (status != 1) {
-            sum = array_sum(array, array_pos);
-            printf("Sum of characters: %i", sum);
+            sum = array_sum(array, array_len);
+            printf("Sum of characters: %i\n", sum);
+            return 0;
         }
 
         extra_chars = 0;
@@ -58,20 +59,15 @@ int main()
 
         val = atoi(input);
         if (extra_chars > 0) {
-            printf("%i extra characters truncated; value %i used\n",
-                    extra_chars, val);
-            continue;
+            printf("%i extra characters truncated\n",
+                    extra_chars);
         }
 
         printf("the value was: %i\n", val);
 
         // STORAGE //
-        array[array_pos++] = val;
-
-
-    } while (val != 0);
-
-    return 0;
+        array[array_len++] = val;
+    }
 
 
 
