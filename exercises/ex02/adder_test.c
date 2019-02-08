@@ -2,5 +2,5 @@
 #include <stdbool.h>
 
 int main() {
-    assert(False && "My first unit test");
+    assert(false && "My first unit test");
 }
