@@ -16,7 +16,7 @@
  * Returns:
  *      int - card value, 0 for entry outside range, and -1 for 'X'
  */
-int get_card_val(char card_name[])
+int get_card_val(char *card_name)
 {
     int val;
     switch(card_name[0]) {
