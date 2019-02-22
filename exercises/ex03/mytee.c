@@ -53,28 +53,35 @@ bool APPEND = false;
 
 int main (int argc, char *argv[])
 {
-    FILE *f_out;
-
-    // handle arguments
+    // handle flag arguments
     char *a;
-    char *flags;
-    for (int i = 1; i < argc; i++) {
+    int i;
+    for (i = 1; i < argc; i++) {
         a = argv[i];
         if (!(strcmp(a, "-a"))) {
             APPEND = true;
-            break;
         }
-        if (!(strcmp(a, "-f"))) {
+        else if (!(strcmp(a, "-f"))) {
             puts("-f not implemented yet");
             break;
-        } else {
-            flags = APPEND ? "a" : "wb";
-            f_out = fopen(a, flags);
-            if (!f_out) {
-                printf("could not find file %s", a);
-                exit(1);
-            }
         }
+        else {
+            break;
+        }
+    }
+
+    // handle file arguments
+    FILE *fs_out[10];
+    FILE *f;
+    int file_count = 0;
+    for (; i < argc; i++) {
+        f = fopen(argv[i], APPEND ? "a" : "wb");
+//        f = fopen(argv[i], "wb");
+        if (!f) {
+            printf("could not find file %s\n", argv[i]);
+            exit(1);
+        }
+        fs_out[file_count++] = f;
     }
 
     // write to stdout and file
@@ -83,13 +90,16 @@ int main (int argc, char *argv[])
     int r;
     while ((r = getline(&line, &lsize, stdin)) != -1) {
         printf("%s", line);
-        if (f_out) {
-            fputs(line, f_out);
+        for (int j = 0; j<file_count; j++) {
+            f = fs_out[j];
+            fputs(line, f);
         }
     }
 
     free(line);
-    fclose(f_out);
+    for (int k = 0; k<file_count; k++) {
+        fclose(fs_out[k]);
+    }
     return 0;
 
 //    // this is where we process the flags
