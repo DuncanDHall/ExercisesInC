@@ -54,10 +54,12 @@ void print_list(Node **list) {
 * returns: int or -1 if the list is empty
 */
 int pop(Node **list) {
-    Node *first = *list;
-    list = &(*list);
-    return first;
-    // TODO; finish this
+    Node *head = *list;
+    if (head == NULL) return -1;
+    int val = head->val;
+    *list = head->next;
+    free(head); // I assumed I should do this even though it's not spec'ed
+    return val;
 }
 
 
@@ -67,7 +69,8 @@ int pop(Node **list) {
 * val: value to add
 */
 void push(Node **list, int val) {
-    // FILL THIS IN!
+    Node *new_head = make_node(val, *list);
+    *list = new_head;
 }
 
 
@@ -78,11 +81,37 @@ void push(Node **list, int val) {
 * list: pointer to pointer to Node
 * val: value to remove
 *
-* returns: number of nodes removed
+* returns: number of nodes removed or -1 if not found
 */
 int remove_by_value(Node **list, int val) {
-    // FILL THIS IN!
-    return 0;
+    int c = 0;
+    Node *previous = *list;
+    Node *current;
+
+    // special cases (empty and single item)
+    if (previous == NULL) {
+        return -1;
+    }
+    current = previous->next;
+    if (previous->val == val) {
+        *list = current;
+        free(previous);
+        return c;
+    }
+
+    // general case
+    do {
+        c++;
+        if (current->val == val) {
+            previous->next = current->next;
+            free(current);
+            return c;
+        } else {
+            previous = current;
+        }
+    } while ((current = current->next));
+
+    return -1;
 }
 
 
@@ -93,6 +122,21 @@ int remove_by_value(Node **list, int val) {
 * list: pointer to pointer to Node
 */
 void reverse(Node **list) {
+    Node *previous = *list;
+    Node *current;
+    Node *next;
+
+    // special cases (empty, single)
+    if (previous == NULL) return;
+    current = previous->next;
+    if (current == NULL) return;
+
+    while ((next = current->next)) {
+        current->next = previous;
+
+        previous = current;
+        current = next;
+    }
     // FILL THIS IN!
 }
 
@@ -108,6 +152,26 @@ int main() {
 
     int retval = pop(list);
     print_list(list);
+
+    // TODO – check for empty lists
+
+//    printf("%i\n", retval);
+//
+//    retval = pop(list);
+//    print_list(list);
+//    printf("%i\n", retval);
+//
+//    retval = pop(list);
+//    print_list(list);
+//    printf("%i\n", retval);
+//
+//    retval = pop(list);
+//    print_list(list);
+//    printf("%i\n", retval);
+//
+//    retval = pop(list);
+//    print_list(list);
+//    printf("%i\n", retval);
 
     push(list, retval+10);
     print_list(list);
