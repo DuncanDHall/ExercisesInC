@@ -126,12 +126,10 @@ void reverse(Node **list) {
     Node *current = *list;
     Node *next;
 
-    // special cases (empty)
+    // special case (empty)
     if (current == NULL) return;
 
-//    current-> = previous;
-//    if (current == NULL) return;
-
+    // general case
     while ((next = current->next)) {
         current->next = previous;
 
@@ -140,7 +138,6 @@ void reverse(Node **list) {
     }
     current->next = previous;
     *list = current;
-    // FILL THIS IN!
 }
 
 
