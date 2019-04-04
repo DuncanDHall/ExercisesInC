@@ -140,6 +140,17 @@ void reverse(Node **list) {
     *list = current;
 }
 
+int swap(Node **list) {
+    Node *first = *list;
+    if (!first) return -1;
+    Node *second = first->next;
+    if (!second) return -1;
+    first->next = second->next;
+    second->next = first;
+    *list = second;
+    return 0;
+}
+
 
 int main() {
     Node *head = make_node(1, NULL);
@@ -174,6 +185,9 @@ int main() {
     push(list, retval+10);
     print_list(list);
 
+    swap(list);
+    print_list(list);
+
     remove_by_value(list, 3);
     print_list(list);
 
@@ -181,5 +195,20 @@ int main() {
     print_list(list);
 
     reverse(list);
+    print_list(list);
+
+    swap(list);
+    print_list(list);
+
+    pop(list);
+    print_list(list);
+
+    swap(list);
+    print_list(list);
+
+    pop(list);
+    print_list(list);
+
+    swap(list);
     print_list(list);
 }
