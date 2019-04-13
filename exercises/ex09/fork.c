@@ -12,7 +12,7 @@ License: MIT License https://opensource.org/licenses/MIT
 #include <errno.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#include <wait.h>
+#include <sys/wait.h>
 
 
 // errno is an external global variable that contains
@@ -90,6 +90,8 @@ int main(int argc, char *argv[])
         }
 
         // check the exit status of the child
+        printf("%d\n", WIFEXITED(status));
+//        status = WIFEXITED(status) ? WEXITSTATUS(status) : 0;
         status = WEXITSTATUS(status);
         printf("Child %d exited with error code %d.\n", pid, status);
     }
