@@ -5,6 +5,10 @@ License: MIT License https://opensource.org/licenses/MIT
 
 */
 
+/*
+ * FIND THE EXPERIMENT USING text find: `#experiment`
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -30,8 +34,15 @@ double get_seconds() {
 }
 
 
-void child_code(int i)
+void child_code(int i, char *c_ptr)
 {
+    // #experiment to test the same virtual memory address space
+    printf("experiment: %c\n", *c_ptr);
+    *c_ptr = 'b';
+    // this prints the character 'a' in all children, leading me to believe that
+    // my system copies the virtual memory space for each fork in this sort of
+    // program rather than having a shared virtual memory space.
+
     sleep(i);
     printf("Hello from child %d.\n", i);
 }
@@ -45,6 +56,12 @@ int main(int argc, char *argv[])
     pid_t pid;
     double start, stop;
     int i, num_children;
+
+
+    // for the #experiment!
+    char *c_ptr = malloc(sizeof(char));
+    *c_ptr = 'a';
+
 
     // the first command-line argument is the name of the executable.
     // if there is a second, it is the number of children to create.
@@ -72,8 +89,11 @@ int main(int argc, char *argv[])
 
         /* see if we're the parent or the child */
         if (pid == 0) {
-            child_code(i);
+            child_code(i, c_ptr);
             exit(i);
+        }
+        else {
+
         }
     }
 
@@ -90,8 +110,6 @@ int main(int argc, char *argv[])
         }
 
         // check the exit status of the child
-        printf("%d\n", WIFEXITED(status));
-//        status = WIFEXITED(status) ? WEXITSTATUS(status) : 0;
         status = WEXITSTATUS(status);
         printf("Child %d exited with error code %d.\n", pid, status);
     }
