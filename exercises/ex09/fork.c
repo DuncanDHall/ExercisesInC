@@ -92,9 +92,6 @@ int main(int argc, char *argv[])
             child_code(i, c_ptr);
             exit(i);
         }
-        else {
-
-        }
     }
 
     /* parent continues */
