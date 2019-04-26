@@ -90,6 +90,7 @@ void bind_to_port(int socket, int port) {
 */
 int say(int socket, char *s)
 {
+    raise(SIGSEGV);
     int res = send(socket, s, strlen(s), 0);
     if (res == -1)
         error("Error talking to the client");
